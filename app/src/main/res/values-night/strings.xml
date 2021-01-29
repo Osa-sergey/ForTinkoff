@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="developers_life">Developers Life</string>
+    <string name="fr1">Последние</string>
+    <string name="fr2">Лучшие</string>
+    <string name="fr3">Горячие</string>
+    <string name="frn">Неопределено</string>
 </resources>

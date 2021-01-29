@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Ovchinnikov</string>
     <string name="developers_life">Developers Life</string>
+    <string name="fr1">Последние</string>
+    <string name="fr2">Лучшие</string>
+    <string name="fr3">Горячие</string>
+    <string name="frn">Неопределено</string>
 </resources>
