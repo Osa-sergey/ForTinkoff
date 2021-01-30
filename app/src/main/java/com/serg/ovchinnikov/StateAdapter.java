@@ -20,7 +20,7 @@ public class StateAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Fragment fragment = new CategoryGifFragment(position);
+        Fragment fragment = new CategoryGifFragment();
         fragments.put(position,fragment);
         return fragment;
     }

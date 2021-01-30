@@ -2,7 +2,6 @@
 package com.serg.ovchinnikov;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -10,19 +9,21 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.serg.ovchinnikov.Api.GifApi;
+import com.serg.ovchinnikov.controller.DownloadController;
 
 public class MainActivity extends FragmentActivity {
 
     private ViewPager2 viewPager;
     private StateAdapter adapter;
     private MaterialButton prev, next;
-
+    private DownloadController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,10 @@ public class MainActivity extends FragmentActivity {
             }
         }).attach();
 
-        // Изначально кнопка неактивна
-        prev.setClickable(false);
-        prev.setBackgroundColor(getResources().getColor(R.color.gray));
+        //получаем экземпляр для работы с retrofit
+        GifApi api = ((MyApp)getApplication()).getGifApi();
+
+        controller = new DownloadController(api);
 
         prev.setOnClickListener(view -> {
             CategoryGifFragment page = (CategoryGifFragment)
@@ -74,13 +76,13 @@ public class MainActivity extends FragmentActivity {
             if(page != null) {
                 page.decreaseGifsBefore();
                 //Если gif до не осталось, то делаем неактивной кнопку назад
-                Log.i("btn_prev","номер: "+page.type+" кол-во: "+page.getGifsBefore());
-                if(page.getGifsBefore() == -1){
+                Log.i("btn_prev","номер: "+viewPager.getCurrentItem()+" кол-во: "+page.getGifsBefore());
+                if(page.getGifsBefore() == 0){
                     prev.setClickable(false);
                     prev.setBackgroundColor(getResources().getColor(R.color.gray));
                 }
-
-
+                // Логическая часть подгрузки gif
+                controller.gifUpdate(page,viewPager.getCurrentItem());
             }
         });
 
@@ -90,13 +92,13 @@ public class MainActivity extends FragmentActivity {
            if(page != null) {
                page.increaseGifsBefore();
                //Если у нас есть хоть одна gif до, то делаем кнопку назад активной
-               Log.i("btn_next","номер: "+page.type+" кол-во: "+page.getGifsBefore());
-               if(page.getGifsBefore() > -1){
+               Log.i("btn_next","номер: "+viewPager.getCurrentItem()+" кол-во: "+page.getGifsBefore());
+               if(page.getGifsBefore() > 0){
                    prev.setClickable(true);
                    prev.setBackgroundColor(getResources().getColor(R.color.black));
                }
-
-
+               // Логическая часть подгрузки gif
+               controller.gifUpdate(page,viewPager.getCurrentItem());
            }
         });
 
@@ -107,13 +109,16 @@ public class MainActivity extends FragmentActivity {
                 CategoryGifFragment page = (CategoryGifFragment)
                         adapter.getFragment(viewPager.getCurrentItem());
                 // При переходе в другую категорию проверяем надо ли блокировать кнопку назад
-                Log.i("change_page","номер: "+page.type+" кол-во: "+page.getGifsBefore());
-                if(page.getGifsBefore() == -1){
+                Log.i("change_page", "номер: " + viewPager.getCurrentItem() + " кол-во: " + page.getGifsBefore());
+                if (page.getGifsBefore() == 0) {
                     prev.setClickable(false);
                     prev.setBackgroundColor(getResources().getColor(R.color.gray));
-                }else{
+                } else {
                     prev.setClickable(true);
                     prev.setBackgroundColor(getResources().getColor(R.color.black));
+                }
+                if (page.getGifsArr().size() == 0) {
+                    controller.firstLoad(page, viewPager.getCurrentItem());
                 }
             }
         });

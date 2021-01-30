@@ -11,15 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.serg.ovchinnikov.pojo.Gif;
+
+import java.util.ArrayList;
+
 public class CategoryGifFragment extends Fragment {
 
-    public final int type;
-    private int gifsBefore = -1;
+    private int gifsBefore = 0;
+    private int pageCounter = 0;
     private ImageView gif;
     private TextView title;
+    private ArrayList<Gif> gifs;
 
-    public CategoryGifFragment(int type){
-        this.type = type;
+    public CategoryGifFragment(){
+        gifs = new ArrayList<>();
     }
 
     @Nullable
@@ -35,16 +40,8 @@ public class CategoryGifFragment extends Fragment {
         title = view.findViewById(R.id.title);
     }
 
-    public void setTitleText(String str) {
-        this.title.setText(str);
-    }
-
     public int getGifsBefore() {
         return gifsBefore;
-    }
-
-    public void setGifsBefore(int gifsBefore) {
-        this.gifsBefore = gifsBefore;
     }
 
     public void increaseGifsBefore(){
@@ -53,5 +50,29 @@ public class CategoryGifFragment extends Fragment {
 
     public void decreaseGifsBefore(){
         this.gifsBefore--;
+    }
+
+    public ArrayList<Gif> getGifsArr() {
+        return gifs;
+    }
+
+    public void appendGifsArr(ArrayList<Gif> gifs) {
+        this.gifs.addAll(gifs);
+    }
+
+    public int getPageCounter() {
+        return pageCounter;
+    }
+
+    public void increasePageCounter() {
+        this.pageCounter++;
+    }
+
+    public ImageView getGifView() {
+        return gif;
+    }
+
+    public TextView getTitleView() {
+        return title;
     }
 }
