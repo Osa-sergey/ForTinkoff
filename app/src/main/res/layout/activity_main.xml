@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/developers_life"
+        android:textStyle="bold"
         android:gravity="center_horizontal"
         android:textColor="@color/black"
         android:textSize="28sp"
