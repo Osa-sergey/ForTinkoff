@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment;
 
 public class CategoryGifFragment extends Fragment {
 
-    private final int type;
-    private boolean start = true;
+    public final int type;
+    private int gifsBefore = -1;
     private ImageView gif;
     private TextView title;
 
@@ -37,5 +37,21 @@ public class CategoryGifFragment extends Fragment {
 
     public void setTitleText(String str) {
         this.title.setText(str);
+    }
+
+    public int getGifsBefore() {
+        return gifsBefore;
+    }
+
+    public void setGifsBefore(int gifsBefore) {
+        this.gifsBefore = gifsBefore;
+    }
+
+    public void increaseGifsBefore(){
+        this.gifsBefore++;
+    }
+
+    public void decreaseGifsBefore(){
+        this.gifsBefore--;
     }
 }

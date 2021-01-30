@@ -33,4 +33,6 @@ public class StateAdapter extends FragmentStateAdapter {
     public Fragment getFragment(int pos){
         return fragments.get(pos);
     }
+
+
 }

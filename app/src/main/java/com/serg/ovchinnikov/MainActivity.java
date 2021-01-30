@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -68,17 +69,53 @@ public class MainActivity extends FragmentActivity {
         prev.setBackgroundColor(getResources().getColor(R.color.gray));
 
         prev.setOnClickListener(view -> {
-            Fragment page = adapter.getFragment(viewPager.getCurrentItem());
+            CategoryGifFragment page = (CategoryGifFragment)
+                    adapter.getFragment(viewPager.getCurrentItem());
             if(page != null) {
+                page.decreaseGifsBefore();
+                //Если gif до не осталось, то делаем неактивной кнопку назад
+                Log.i("btn_prev","номер: "+page.type+" кол-во: "+page.getGifsBefore());
+                if(page.getGifsBefore() == -1){
+                    prev.setClickable(false);
+                    prev.setBackgroundColor(getResources().getColor(R.color.gray));
+                }
+
 
             }
         });
 
         next.setOnClickListener(view -> {
-           Fragment page = adapter.getFragment(viewPager.getCurrentItem());
+           CategoryGifFragment page = (CategoryGifFragment)
+                   adapter.getFragment(viewPager.getCurrentItem());
            if(page != null) {
+               page.increaseGifsBefore();
+               //Если у нас есть хоть одна gif до, то делаем кнопку назад активной
+               Log.i("btn_next","номер: "+page.type+" кол-во: "+page.getGifsBefore());
+               if(page.getGifsBefore() > -1){
+                   prev.setClickable(true);
+                   prev.setBackgroundColor(getResources().getColor(R.color.black));
+               }
+
 
            }
+        });
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                CategoryGifFragment page = (CategoryGifFragment)
+                        adapter.getFragment(viewPager.getCurrentItem());
+                // При переходе в другую категорию проверяем надо ли блокировать кнопку назад
+                Log.i("change_page","номер: "+page.type+" кол-во: "+page.getGifsBefore());
+                if(page.getGifsBefore() == -1){
+                    prev.setClickable(false);
+                    prev.setBackgroundColor(getResources().getColor(R.color.gray));
+                }else{
+                    prev.setClickable(true);
+                    prev.setBackgroundColor(getResources().getColor(R.color.black));
+                }
+            }
         });
     }
 }
