@@ -2,14 +2,17 @@
 package com.serg.ovchinnikov;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -17,6 +20,8 @@ public class MainActivity extends FragmentActivity {
 
     private ViewPager2 viewPager;
     private StateAdapter adapter;
+    private MaterialButton prev, next;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,9 @@ public class MainActivity extends FragmentActivity {
         TextView text = findViewById(R.id.text);
         Typeface font = Typeface.createFromAsset(getAssets(),"fonts/7604.ttf");
         text.setTypeface(font);
+
+        prev = findViewById(R.id.back);
+        next = findViewById(R.id.forward);
 
         adapter = new StateAdapter(this);
         viewPager = findViewById(R.id.pager);
@@ -54,5 +62,23 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         }).attach();
+
+        // Изначально кнопка неактивна
+        prev.setClickable(false);
+        prev.setBackgroundColor(getResources().getColor(R.color.gray));
+
+        prev.setOnClickListener(view -> {
+            Fragment page = adapter.getFragment(viewPager.getCurrentItem());
+            if(page != null) {
+
+            }
+        });
+
+        next.setOnClickListener(view -> {
+           Fragment page = adapter.getFragment(viewPager.getCurrentItem());
+           if(page != null) {
+
+           }
+        });
     }
 }

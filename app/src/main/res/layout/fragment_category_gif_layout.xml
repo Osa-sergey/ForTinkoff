@@ -39,7 +39,7 @@
                 android:maxLines="1"
                 android:textAlignment="textStart"
                 android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 tools:text="@tools:sample/lorem/random" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
