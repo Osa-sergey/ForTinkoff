@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.serg.ovchinnikov.Api.GifApi;
 import com.serg.ovchinnikov.CategoryGifFragment;
 import com.serg.ovchinnikov.R;
@@ -108,6 +109,7 @@ public class DownloadController {
                     .asGif()
                     .load(section.getGifsArr().get(section.getGifsBefore()).getGifURL())
                     .placeholder(R.drawable.ic_downloading)
+                    .transition(DrawableTransitionOptions.withCrossFade(300))
                     .error(R.drawable.ic_download_error)
                     .into(section.getGifView());
 
