@@ -1,10 +1,12 @@
 package com.serg.ovchinnikov.controller;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.serg.ovchinnikov.Api.GifApi;
 import com.serg.ovchinnikov.CategoryGifFragment;
+import com.serg.ovchinnikov.R;
 import com.serg.ovchinnikov.pojo.Gif;
 import com.serg.ovchinnikov.pojo.Gifs;
 
@@ -15,9 +17,13 @@ import retrofit2.Response;
 public class DownloadController {
 
     private GifApi api;
+    private Resources res;
+    private String pcgName;
 
-    public DownloadController(GifApi api){
+    public DownloadController(GifApi api, Resources res,String pcgName){
         this.api = api;
+        this.res = res;
+        this.pcgName = pcgName;
     }
 
     public void gifUpdate(CategoryGifFragment section, int category) {
@@ -69,27 +75,40 @@ public class DownloadController {
     }
 
     private void drawGif(CategoryGifFragment section){
+        //Если у нас не загрузился из интернета json или в нем не было элементов (категория пустая)
+        if (section.getGifsArr().size() == 0){
+            section.getTitleView()
+                    .setText(res.getText(R.string.empty_category));
+            section.getTitleView().setTextColor(res.getColor(R.color.white));
+            section.getGifView().setImageResource(res.getIdentifier("ic_empty","drawable",pcgName));
+            section.getCardView().setBackgroundColor(res.getColor(R.color.gray));
+            return;
+        }
+        Log.i("drawGif","url: "+section.getGifsArr().get(section.getGifsBefore()).getGifURL());
+        section.getCardView().setBackgroundColor(res.getColor(R.color.white));
+        section.getTitleView().setTextColor(res.getColor(R.color.black));
         Glide.with(section.getContext())
-                .asGif()
-                .load(section.getGifsArr().get(section.getGifsBefore()).getGifURL())
-                .into(section.getGifView());
+                    .asGif()
+                    .load(section.getGifsArr().get(section.getGifsBefore()).getGifURL())
+                    .into(section.getGifView());
 
-        section.getTitleView()
-                .setText(section.getGifsArr().get(section.getGifsBefore()).getDescription());
+            section.getTitleView()
+                    .setText(section.getGifsArr().get(section.getGifsBefore()).getDescription());
     }
 
     private Call<Gifs> load(CategoryGifFragment section, int category){
         int pageNumber = section.getPageCounter();
+        Log.i("load_page", "номер загружаемой страницы: " + pageNumber + " категория: " + category);
         Call<Gifs> gifsCall;
         switch (category){
             case 0:
                 gifsCall = api.getGifList("latest",pageNumber);
                 break;
             case 1:
-                gifsCall = api.getGifList("hot",pageNumber);
+                gifsCall = api.getGifList("top",pageNumber);
                 break;
             case 2:
-                gifsCall = api.getGifList("top",pageNumber);
+                gifsCall = api.getGifList("hot",pageNumber);
                 break;
             default:
                 gifsCall = api.getGifList("err",pageNumber);

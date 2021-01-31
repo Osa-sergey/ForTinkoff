@@ -5,4 +5,5 @@
     <string name="fr2">Лучшие</string>
     <string name="fr3">Горячие</string>
     <string name="frn">Неопределено</string>
+    <string name="empty_category">В категории пока нет Gif</string>
 </resources>

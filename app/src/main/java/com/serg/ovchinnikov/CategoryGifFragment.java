@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.card.MaterialCardView;
 import com.serg.ovchinnikov.pojo.Gif;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class CategoryGifFragment extends Fragment {
     private ImageView gif;
     private TextView title;
     private ArrayList<Gif> gifs;
+    private MaterialCardView card;
 
     public CategoryGifFragment(){
         gifs = new ArrayList<>();
@@ -38,6 +40,7 @@ public class CategoryGifFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         gif = view.findViewById(R.id.gif);
         title = view.findViewById(R.id.title);
+        card = view.findViewById(R.id.card);
     }
 
     public int getGifsBefore() {
@@ -74,5 +77,9 @@ public class CategoryGifFragment extends Fragment {
 
     public TextView getTitleView() {
         return title;
+    }
+
+    public MaterialCardView getCardView() {
+        return card;
     }
 }

@@ -15,14 +15,16 @@ public class StateAdapter extends FragmentStateAdapter {
     public StateAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
         fragments = new HashMap<>();
+        for (int i = 0; i <3; i++) {
+            Fragment fragment = new CategoryGifFragment();
+            fragments.put(i,fragment);
+        }
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        Fragment fragment = new CategoryGifFragment();
-        fragments.put(position,fragment);
-        return fragment;
+       return fragments.get(position);
     }
 
     @Override

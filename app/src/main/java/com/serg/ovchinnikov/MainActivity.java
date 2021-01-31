@@ -45,6 +45,11 @@ public class MainActivity extends FragmentActivity {
         TabLayout tabLayout = findViewById(R.id.tabs);
         Resources res = getResources();
 
+        //получаем экземпляр для работы с retrofit
+        GifApi api = ((MyApp)getApplication()).getGifApi();
+
+        controller = new DownloadController(api,res,getPackageName());
+
         new TabLayoutMediator(tabLayout, viewPager,
                 new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -65,18 +70,13 @@ public class MainActivity extends FragmentActivity {
             }
         }).attach();
 
-        //получаем экземпляр для работы с retrofit
-        GifApi api = ((MyApp)getApplication()).getGifApi();
-
-        controller = new DownloadController(api);
-
         prev.setOnClickListener(view -> {
             CategoryGifFragment page = (CategoryGifFragment)
                     adapter.getFragment(viewPager.getCurrentItem());
             if(page != null) {
                 page.decreaseGifsBefore();
                 //Если gif до не осталось, то делаем неактивной кнопку назад
-                Log.i("btn_prev","номер: "+viewPager.getCurrentItem()+" кол-во: "+page.getGifsBefore());
+                Log.i("btn_prev","номер категории: "+viewPager.getCurrentItem()+" номер gif: "+page.getGifsBefore());
                 if(page.getGifsBefore() == 0){
                     prev.setClickable(false);
                     prev.setBackgroundColor(getResources().getColor(R.color.gray));
@@ -92,7 +92,7 @@ public class MainActivity extends FragmentActivity {
            if(page != null) {
                page.increaseGifsBefore();
                //Если у нас есть хоть одна gif до, то делаем кнопку назад активной
-               Log.i("btn_next","номер: "+viewPager.getCurrentItem()+" кол-во: "+page.getGifsBefore());
+               Log.i("btn_next","номер категории: "+viewPager.getCurrentItem()+" номер gif: "+page.getGifsBefore());
                if(page.getGifsBefore() > 0){
                    prev.setClickable(true);
                    prev.setBackgroundColor(getResources().getColor(R.color.black));
@@ -109,7 +109,7 @@ public class MainActivity extends FragmentActivity {
                 CategoryGifFragment page = (CategoryGifFragment)
                         adapter.getFragment(viewPager.getCurrentItem());
                 // При переходе в другую категорию проверяем надо ли блокировать кнопку назад
-                Log.i("change_page", "номер: " + viewPager.getCurrentItem() + " кол-во: " + page.getGifsBefore());
+                Log.i("change_page", "номер категории на которую переходим: " + viewPager.getCurrentItem() + " номер gif: " + page.getGifsBefore());
                 if (page.getGifsBefore() == 0) {
                     prev.setClickable(false);
                     prev.setBackgroundColor(getResources().getColor(R.color.gray));
@@ -118,6 +118,7 @@ public class MainActivity extends FragmentActivity {
                     prev.setBackgroundColor(getResources().getColor(R.color.black));
                 }
                 if (page.getGifsArr().size() == 0) {
+                    Log.i("notLoadedGiftYet", "номер страницы: " + viewPager.getCurrentItem());
                     controller.firstLoad(page, viewPager.getCurrentItem());
                 }
             }
