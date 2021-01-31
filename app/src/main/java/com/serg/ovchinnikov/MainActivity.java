@@ -120,8 +120,16 @@ public class MainActivity extends FragmentActivity {
                 if (page.getGifsArr().size() == 0) {
                     Log.i("notLoadedGiftYet", "номер страницы: " + viewPager.getCurrentItem());
                     controller.firstLoad(page, viewPager.getCurrentItem());
+                }else {
+                    //Делаем активной кнопку вперед
+                    next.setClickable(true);
+                    next.setBackgroundColor(getResources().getColor(R.color.black));
                 }
             }
         });
+    }
+
+    public MaterialButton getNext() {
+        return next;
     }
 }

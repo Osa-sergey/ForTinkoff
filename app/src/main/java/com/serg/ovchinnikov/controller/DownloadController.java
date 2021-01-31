@@ -77,6 +77,12 @@ public class DownloadController {
     private void drawGif(CategoryGifFragment section){
         //Если у нас не загрузился из интернета json или в нем не было элементов (категория пустая)
         if (section.getGifsArr().size() == 0){
+            //Чтобы у нас не увеличивался счетчик страниц
+            section.setPageCounterZero();
+
+            //блокируем кнопку вперед
+            section.blockBtnForward();
+            //настройка внешнего вида
             section.getTitleView()
                     .setText(res.getText(R.string.empty_category));
             section.getTitleView().setTextColor(res.getColor(R.color.white));
@@ -84,6 +90,9 @@ public class DownloadController {
             section.getCardView().setBackgroundColor(res.getColor(R.color.gray));
             return;
         }
+        //разблочим кнопку вперед
+        section.unBlockBtnForward();
+
         Log.i("drawGif","url: "+section.getGifsArr().get(section.getGifsBefore()).getGifURL());
         section.getCardView().setBackgroundColor(res.getColor(R.color.white));
         section.getTitleView().setTextColor(res.getColor(R.color.black));

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.serg.ovchinnikov.pojo.Gif;
 
@@ -71,6 +72,10 @@ public class CategoryGifFragment extends Fragment {
         this.pageCounter++;
     }
 
+    public void setPageCounterZero(){
+        this.pageCounter = 0;
+    }
+
     public ImageView getGifView() {
         return gif;
     }
@@ -81,5 +86,17 @@ public class CategoryGifFragment extends Fragment {
 
     public MaterialCardView getCardView() {
         return card;
+    }
+
+    public void blockBtnForward() {
+        MaterialButton btn =((MainActivity)getActivity()).getNext();
+        btn.setClickable(false);
+        btn.setBackgroundColor(getResources().getColor(R.color.gray));
+    }
+
+    public void unBlockBtnForward() {
+        MaterialButton btn =((MainActivity)getActivity()).getNext();
+        btn.setClickable(true);
+        btn.setBackgroundColor(getResources().getColor(R.color.black));
     }
 }
