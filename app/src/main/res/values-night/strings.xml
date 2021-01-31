@@ -6,4 +6,6 @@
     <string name="fr3">Горячие</string>
     <string name="frn">Неопределено</string>
     <string name="empty_category">В категории пока нет Gif</string>
+    <string name="internet_connection_problem">Проблемы с интернет соединением</string>
+    <string name="server_connection_problem">Проблемы на сороне сервера</string>
 </resources>

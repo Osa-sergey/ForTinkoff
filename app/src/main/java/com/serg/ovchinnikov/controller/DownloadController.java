@@ -1,13 +1,13 @@
 package com.serg.ovchinnikov.controller;
 
-import android.content.res.Resources;
+import android.content.res.Resources;;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.serg.ovchinnikov.Api.GifApi;
 import com.serg.ovchinnikov.CategoryGifFragment;
 import com.serg.ovchinnikov.R;
-import com.serg.ovchinnikov.pojo.Gif;
 import com.serg.ovchinnikov.pojo.Gifs;
 
 import retrofit2.Call;
@@ -39,14 +39,17 @@ public class DownloadController {
                 @Override
                 public void onResponse(Call<Gifs> call, Response<Gifs> response) {
                     if(response.isSuccessful()) {
+                        Log.i("preloadJson","success");
                         section.increasePageCounter();
                         section.appendGifsArr(response.body().getResult());
+                    }else {
+                        Toast.makeText(section.getActivity().getApplicationContext(),res.getText(R.string.server_connection_problem),Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Gifs> call, Throwable t) {
-
+                    Toast.makeText(section.getActivity().getApplicationContext(),res.getText(R.string.internet_connection_problem),Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -60,16 +63,19 @@ public class DownloadController {
             @Override
             public void onResponse(Call<Gifs> call, Response<Gifs> response) {
                 if(response.isSuccessful()) {
+                    Log.i("firstLoadJson","success");
                     section.increasePageCounter();
                     section.appendGifsArr(response.body().getResult());
                     //отрисовываем gif с подписью
                     drawGif(section);
+                }else {
+                    Toast.makeText(section.getActivity().getApplicationContext(),res.getText(R.string.server_connection_problem),Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Gifs> call, Throwable t) {
-
+                Toast.makeText(section.getActivity().getApplicationContext(),res.getText(R.string.internet_connection_problem),Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -93,15 +99,19 @@ public class DownloadController {
         //разблочим кнопку вперед
         section.unBlockBtnForward();
 
-        Log.i("drawGif","url: "+section.getGifsArr().get(section.getGifsBefore()).getGifURL());
-        section.getCardView().setBackgroundColor(res.getColor(R.color.white));
         section.getTitleView().setTextColor(res.getColor(R.color.black));
+        section.getCardView().setBackgroundColor(res.getColor(R.color.white));
+
+        Log.i("drawGif","url: "+section.getGifsArr().get(section.getGifsBefore()).getGifURL());
+
         Glide.with(section.getContext())
                     .asGif()
                     .load(section.getGifsArr().get(section.getGifsBefore()).getGifURL())
+                    .placeholder(R.drawable.ic_downloading)
+                    .error(R.drawable.ic_download_error)
                     .into(section.getGifView());
 
-            section.getTitleView()
+        section.getTitleView()
                     .setText(section.getGifsArr().get(section.getGifsBefore()).getDescription());
     }
 
